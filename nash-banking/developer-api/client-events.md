@@ -1,59 +1,127 @@
 # Client Events
 
-Events broadcasted from the server to the client (or locally on the client).
+This section lists all net events broadcasted to the client by the server. You can listen to them with `RegisterNetEvent` / `AddEventHandler` to hook into the banking flow. Each entry includes payload and example usage.
 
-## TPE flow
+<details>
 
-### `nash_banking:openTPE`
+<summary>nash_banking:openTPE</summary>
 
-Opens the TPE overlay with the given amount, description and cards.
+```lua
+RegisterNetEvent('nash_banking:openTPE', function(data)
+    -- data.amount, data.description, data.cards
+    -- Opens the TPE overlay on the buyer's screen
+end)
+```
 
-_Payload, example listener — filled in Pass 2._
+_Payload, fields and full example — filled in Pass 2._
 
-### `nash_banking:tpeResult`
+</details>
 
-Notifies the buyer of the payment outcome.
+<details>
 
-_Filled in Pass 2._
+<summary>nash_banking:tpeResult</summary>
 
-### `nash_banking:buyerReceiveTPE`
+```lua
+RegisterNetEvent('nash_banking:tpeResult', function(result)
+    -- result.success (boolean), result.message (string?)
+end)
+```
 
-Specifically fired for P2P flows — buyer receives the TPE in their hand.
+_Payload and example — filled in Pass 2._
 
-_Filled in Pass 2._
+</details>
 
-### `nash_banking:sellerTransferOut`
+<details>
 
-Tells the seller to play the give animation and remove the prop.
+<summary>nash_banking:buyerReceiveTPE</summary>
 
-_Filled in Pass 2._
+```lua
+RegisterNetEvent('nash_banking:buyerReceiveTPE', function(data)
+    -- P2P flow — buyer receives the TPE in their hand
+    -- data.amount, data.description, data.cards
+end)
+```
 
-### `nash_banking:sellerCleanup`
+_Payload and example — filled in Pass 2._
 
-Tells the seller to remove the prop after an error.
+</details>
 
-_Filled in Pass 2._
+<details>
 
-## UI / balance
+<summary>nash_banking:sellerTransferOut</summary>
 
-### `nash_banking:updateBalance`
+```lua
+RegisterNetEvent('nash_banking:sellerTransferOut', function()
+    -- Tells the seller to play the give animation and remove the prop
+end)
+```
 
-Updates the bank / cash balance shown in the UI.
+_Example — filled in Pass 2._
 
-_Filled in Pass 2._
+</details>
 
-### `nash_banking:notification`
+<details>
 
-Displays an in-UI notification toast.
+<summary>nash_banking:sellerCleanup</summary>
 
-_Filled in Pass 2._
+```lua
+RegisterNetEvent('nash_banking:sellerCleanup', function()
+    -- Tells the seller to remove the prop after an error
+end)
+```
 
-### `nash_banking:inspectCard`
+_Example — filled in Pass 2._
 
-Opens the card inspection UI with the given metadata.
+</details>
 
-_Filled in Pass 2._
+<details>
 
-## Other events
+<summary>nash_banking:updateBalance</summary>
 
-_Filled in Pass 2._
+```lua
+RegisterNetEvent('nash_banking:updateBalance', function(data)
+    -- data.bank, data.cash
+    -- Refreshes the bank / cash balance in the UI
+end)
+```
+
+_Payload and example — filled in Pass 2._
+
+</details>
+
+<details>
+
+<summary>nash_banking:notification</summary>
+
+```lua
+RegisterNetEvent('nash_banking:notification', function(data)
+    -- data.type ('success' | 'error' | 'warning' | 'info')
+    -- data.title, data.message, data.icon
+end)
+```
+
+_Payload and example — filled in Pass 2._
+
+</details>
+
+<details>
+
+<summary>nash_banking:inspectCard</summary>
+
+```lua
+RegisterNetEvent('nash_banking:inspectCard', function(metadata)
+    -- Opens the card inspection UI with the given metadata
+end)
+```
+
+_Payload and example — filled in Pass 2._
+
+</details>
+
+<details>
+
+<summary>Other events</summary>
+
+_Additional client events will be documented in Pass 2._
+
+</details>

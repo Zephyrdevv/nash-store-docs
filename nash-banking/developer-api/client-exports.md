@@ -1,19 +1,43 @@
 # Client Exports
 
-Exports callable from any client-side script via `exports.nash_banking:<name>(...)`.
+This section provides all available client exports for Nash Banking. These exports are primarily used by `ox_inventory` to trigger item behaviors (using the TPE, inspecting a physical card). Each export includes a short description and usage example.
 
-## `nash_tpe(data, slot)`
+<details>
 
-ox\_inventory handler — called when a player uses the `nash_tpe` item. Spawns the terminal prop and opens the seller POS UI.
+<summary>nash_tpe</summary>
+
+```lua
+-- Called by ox_inventory when a player uses the nash_tpe item
+-- Declared in ox_inventory/data/items.lua via client.export = 'nash_banking.nash_tpe'
+exports('nash_tpe', function(data, slot)
+    -- spawns the terminal prop and opens the seller POS UI
+end)
+```
 
 _Signature, metadata format, example — filled in Pass 2._
 
-## `nash_card_physical(data, slot)`
+</details>
 
-ox\_inventory handler — called when a player uses the physical card item. Opens the card inspection UI.
+<details>
+
+<summary>nash_card_physical</summary>
+
+```lua
+-- Called by ox_inventory when a player uses the nash_card_physical item
+-- Declared in ox_inventory/data/items.lua via client.export = 'nash_banking.nash_card_physical'
+exports('nash_card_physical', function(data, slot)
+    -- opens the card inspection UI with slot.metadata
+end)
+```
 
 _Signature, metadata format, example — filled in Pass 2._
 
-## Other exports
+</details>
 
-_List of any additional client exports — filled in Pass 2._
+<details>
+
+<summary>Other exports</summary>
+
+_Additional client exports will be documented in Pass 2._
+
+</details>
