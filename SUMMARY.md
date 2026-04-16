@@ -1,7 +1,7 @@
 # Table of contents
 
 * [Welcome](README.md)
-* [Official Store](https://nash30k.tebex.io)
+* [Official Store](https://nash-store.com/)
 * [Discord](https://discord.gg/MQM3Q8QrvH)
 
 ## ASSETS

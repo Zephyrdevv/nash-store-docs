@@ -2,7 +2,7 @@
 
 > **Immersive NPC bag-snatching system for your FiveM server.** Players can rob NPC pedestrians at night, triggering realistic animations, randomized loot drops, and automatic police dispatch alerts.
 
-**Purchase:** [nash30k.tebex.io](https://nash30k.tebex.io)
+**Purchase:** [nash-store.com](https://nash-store.com/)
 **Price:** Free
 **Framework:** ESX
 

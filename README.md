@@ -8,7 +8,7 @@ Nash Store offers premium and free FiveM resources with clean code, polished UIs
 
 ## Links
 
-- **Official Store:** [nash30k.tebex.io](https://nash30k.tebex.io)
+- **Official Store:** [nash-store.com](https://nash-store.com/)
 - **Discord:** [discord.gg/MQM3Q8QrvH](https://discord.gg/MQM3Q8QrvH)
 
 ---

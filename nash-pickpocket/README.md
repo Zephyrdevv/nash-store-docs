@@ -2,7 +2,7 @@
 
 > **Advanced pickpocket system with an engaging lock-breaking minigame.** Features progressive difficulty scaling, streak bonuses, health penalties on failure, night-only restrictions, and full police dispatch integration.
 
-**Purchase:** [nash30k.tebex.io](https://nash30k.tebex.io)
+**Purchase:** [nash-store.com](https://nash-store.com/)
 **Price:** $2.00
 **Frameworks:** ESX + ox_lib
 
