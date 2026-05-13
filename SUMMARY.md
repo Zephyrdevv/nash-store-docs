@@ -50,6 +50,7 @@
     * [Client Events](nash-banking/developer-api/client-events.md)
     * [Callbacks](nash-banking/developer-api/callbacks.md)
     * [Commands](nash-banking/developer-api/commands.md)
+  * [Changelog](nash-banking/changelog.md)
 * [bagpick](bagpick/README.md)
   * [Installation](bagpick/installation.md)
   * [Compatibility](bagpick/compatibility.md)
