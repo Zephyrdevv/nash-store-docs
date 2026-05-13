@@ -30,20 +30,29 @@ Replace `'license:abc123…'` with the player's identifier (QBCore: `citizenid`)
 
 ## Via server export (programmatic)
 
-Call `Database.SetSubscription` from another server-side script:
+`Database.SetSubscription` is the server-side function that grants a subscription. It's not exposed as an `exports()` by default, so you have two options:
+
+**Option A — Add an export inside `nash_banking`** (recommended if you want to call it from another resource)
+
+In `server/main.lua`, add:
 
 ```lua
--- In your custom resource (server-side):
-local identifier = 'license:abc123…'
-local tier = 'premium'
+exports('SetSubscription', function(identifier, tier, nextChargeAt)
+    Database.SetSubscription(identifier, tier, nextChargeAt, function() end)
+end)
+```
+
+Then from anywhere in your scripts:
+
+```lua
+local identifier   = 'license:abc123…'   -- ESX identifier or QBCore citizenid
+local tier         = 'premium'           -- 'standard' | 'plus' | 'premium'
 local nextChargeAt = os.date('%Y-%m-%d %H:%M:%S', os.time() + 30 * 86400)
 
 exports.nash_banking:SetSubscription(identifier, tier, nextChargeAt)
 ```
 
-{% hint style="info" %}
-`SetSubscription` is not exposed as a formal export by default. If you want to call it from other resources, wrap the `Database.SetSubscription` function with an `exports()` in `server/main.lua`.
-{% endhint %}
+**Option B — Trigger a custom server event** that calls `Database.SetSubscription` internally. Same flexibility, no export to declare.
 
 ## Lifetime / permanent subscriptions
 

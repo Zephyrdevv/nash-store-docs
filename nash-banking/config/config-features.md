@@ -19,7 +19,7 @@ Config.Savings = {
 
 ```lua
 Config.Messaging = {
-    -- Tenor API key lives in server/config.secret.lua (server-only for security)
+    -- Giphy API key lives in server/config.secret.lua (server-only for security)
     MaxMessageLength = 500,
     RateLimitMs = 1000,
     MaxMessagesPerConversation = 100,

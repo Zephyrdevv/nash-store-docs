@@ -179,7 +179,7 @@ end, contactIdentifier)
 
 <summary>nash_banking:searchGifs</summary>
 
-Searches GIFs via Tenor (requires `Config.secret.lua` → `TenorApiKey`).
+Searches GIFs via Giphy (requires `server/config.secret.lua` → `GiphyApiKey`).
 
 ```lua
 Bridge.TriggerCallback('nash_banking:searchGifs', function(gifs)
@@ -420,7 +420,7 @@ Bridge.TriggerCallback('nash_banking:getBusiness', function(business) end)
 
 <summary>nash_banking:createBusiness</summary>
 
-Creates a new business (when `Config.Business.AllowPlayerCreation = true`).
+Creates a new business. Charges `Config.Business.CreationCost` to the player's bank account and caps at `Config.Business.MaxBusinessesPerPlayer`.
 
 ```lua
 Bridge.TriggerCallback('nash_banking:createBusiness', function(success, message) end, name)
@@ -457,11 +457,14 @@ Bridge.TriggerCallback('nash_banking:getBusinessTransactions', function(transact
 
 <summary>nash_banking:addBusinessEmployee / nash_banking:removeBusinessEmployee</summary>
 
-Adds / removes an employee (by identifier).
+Adds / removes an employee. The first argument of `addBusinessEmployee` accepts either a raw identifier (`license:…` / citizenid) **or** a numeric server ID — the latter is resolved server-side to the player's identifier, so admins / bosses can paste the in-game `id` directly without looking up the long string.
 
 ```lua
-Bridge.TriggerCallback('nash_banking:addBusinessEmployee', function(success) end, identifier, role)
-Bridge.TriggerCallback('nash_banking:removeBusinessEmployee', function(success) end, identifier)
+-- targetInput: raw identifier OR server ID (number)
+Bridge.TriggerCallback('nash_banking:addBusinessEmployee', function(result) end, targetInput, role)
+-- result = { success = boolean, message = string?, employees = table? }
+
+Bridge.TriggerCallback('nash_banking:removeBusinessEmployee', function(result) end, identifier)
 ```
 
 </details>
@@ -470,7 +473,7 @@ Bridge.TriggerCallback('nash_banking:removeBusinessEmployee', function(success) 
 
 <summary>nash_banking:buyBusinessTPE</summary>
 
-Buys a business TPE terminal (`Config.Business.TPE.Price`), gives the `nash_tpe` item with `metadata.business_id` set.
+Buys a business TPE terminal (cost = `Config.Business.TPECost`), gives the `nash_tpe` item with `metadata.business_id` set.
 
 ```lua
 Bridge.TriggerCallback('nash_banking:buyBusinessTPE', function(success, message) end)

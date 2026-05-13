@@ -26,6 +26,13 @@ Three tiers are shipped by default. The `features` block is what the server read
     id = 'standard', name = 'Standard', price = 0,
     color = '#3b82f6',
     gradient = 'linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #3b82f6 100%)',
+    description = 'Free basic subscription',
+    highlights = {
+        { icon = 'transfer', text = '5,000€ transfer limit per month with no extra fees, up to 5 transfers per day' },
+        { icon = 'atm',      text = '2,000€ free ATM withdrawals per rolling month' },
+        { icon = 'star',     text = '1 NashPoint for every 10€ spent' },
+        { icon = 'card',     text = 'Up to 1 virtual and physical bank card' },
+    },
     features = {
         maxCards = 1,
         maxTransferPerDay = 5,
@@ -49,6 +56,14 @@ Three tiers are shipped by default. The `features` block is what the server read
     id = 'plus', name = 'Plus', price = 500,
     color = '#a855f7',
     gradient = 'linear-gradient(135deg, #581c87 0%, #7c3aed 50%, #a855f7 100%)',
+    description = 'More perks for your daily life',
+    highlights = {
+        { icon = 'transfer', text = '25,000€ transfer limit per month with no extra fees, up to 15 transfers per day' },
+        { icon = 'atm',      text = '10,000€ free ATM withdrawals per rolling month' },
+        { icon = 'star',     text = '2 NashPoints for every 10€ spent' },
+        { icon = 'card',     text = 'Up to 2 virtual and physical bank cards' },
+        { icon = 'invest',   text = 'Full access to stock and ETF investment markets' },
+    },
     features = {
         maxCards = 2,
         maxTransferPerDay = 15,
@@ -72,6 +87,16 @@ Three tiers are shipped by default. The `features` block is what the server read
     id = 'premium', name = 'Premium', price = 2000,
     color = '#D4A017',
     gradient = 'linear-gradient(135deg, #5C4000 0%, #B8860B 50%, #FFD700 100%)',
+    description = 'The ultimate banking experience',
+    highlights = {
+        { icon = 'transfer', text = 'Unlimited transfers with no amount or frequency restrictions' },
+        { icon = 'atm',      text = 'Unlimited withdrawals with no amount restrictions' },
+        { icon = 'star',     text = '5 NashPoints for every 10€ spent' },
+        { icon = 'card',     text = 'Up to 3 virtual and physical bank cards' },
+        { icon = 'invest',   text = 'Full access to stock and ETF investment markets' },
+        { icon = 'crypto',   text = 'Real-time cryptocurrency trading' },
+        { icon = 'support',  text = '24/7 priority customer support' },
+    },
     features = {
         maxCards = 3,
         maxTransferPerDay = -1,

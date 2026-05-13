@@ -152,7 +152,7 @@ With `Config.PhysicalCard.FreezeOnLoss = true` (the default), the card is **auto
 
 <summary>What's the difference between a personal business and a job-linked business?</summary>
 
-- **Personal business** — created by a player via `/bank` → Business tab (when `Config.Business.AllowPlayerCreation = true`). Any player can be made an employee. Transactions are independent from the framework's job system.
+- **Personal business** — created by a player via `/bank` → Business tab (charged `Config.Business.CreationCost`, default 50 000 €, capped by `Config.Business.MaxBusinessesPerPlayer`). Any player can be made an employee. Transactions are independent from the framework's job system.
 - **Job-linked business** — created by an admin via `/bankadmin` with a `job_name`. Employees of the framework job automatically have access at their matching role (boss/manager/employee). When the business receives TPE income with an associated `job_name`, it is credited to the job society account in ESX / `management` in QBCore.
 
 </details>

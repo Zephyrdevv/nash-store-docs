@@ -8,10 +8,10 @@ Append to `Config.ATMLocations`:
 
 ```lua
 Config.ATMLocations = {
-    { coords = vector3(149.12, -1038.94, 29.37), label = 'DAB Legion Square' },
+    { coords = vector3(149.12, -1038.94, 29.37), label = 'Legion Square ATM' },
     -- ...
     -- New ATM
-    { coords = vector3(5545.20, -152.08, 35.10), label = 'DAB Mount Chiliad' },
+    { coords = vector3(5545.20, -152.08, 35.10), label = 'Mount Chiliad ATM' },
 }
 ```
 
@@ -23,10 +23,10 @@ Append to `Config.BankLocations`:
 
 ```lua
 Config.BankLocations = {
-    { coords = vector4(149.4754, -1042.0674, 29.3680, 337.8459), label = 'Banque Legion Square' },
+    { coords = vector4(149.4754, -1042.0674, 29.3680, 337.8459), label = 'Legion Square Bank' },
     -- ...
     -- New branch
-    { coords = vector4(1089.03, -3192.14, -38.99, 180.0), label = 'Banque souterraine LSIA' },
+    { coords = vector4(1089.03, -3192.14, -38.99, 180.0), label = 'LSIA Underground Bank' },
 }
 ```
 
@@ -74,11 +74,11 @@ Delivery points are pickup locations for physical cards, **separate** from bank 
 
 ```lua
 Config.DeliveryPoints = {
-    { coords = vector4(707.68, -964.16, 30.40, 90.0), label = 'Point relais Pillbox' },
+    { coords = vector4(707.68, -964.16, 30.40, 90.0), label = 'Pillbox Pickup Point' },
 }
 ```
 
-A blue ped + `ox_target` interaction "Récupérer un colis" spawns at each point.
+A blue ped + `ox_target` interaction "Pick up a package" spawns at each point.
 
 ## Restart
 

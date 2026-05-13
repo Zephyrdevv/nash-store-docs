@@ -53,19 +53,47 @@ The app re-registers automatically if `lb-phone` restarts (listener on `onResour
 
 ## Configuration
 
-Each phone app has its own `config.lua` with a `Config.Phone` block — app name, locale, currency, "default app" flag. See [`config.lua` in Configuration](../config/config-main.md) for the equivalent desktop-side options.
+Each phone app has its own `config.lua`. **The two apps use slightly different shapes** — the personal app wraps everything in a `Config.Phone` table, the business app uses flat `Config.*` keys. The fields themselves are equivalent.
+
+### Personal — `nash_banking_phone/config.lua`
 
 ```lua
--- nash_banking_phone/config.lua (excerpt)
 Config.Phone = {
-    AppName     = 'Nash Banking',
-    DefaultApp  = true,
-    Locale      = 'fr',
-    Currency    = '€',
+    Locale       = 'en',          -- 'fr' or 'en'
+    AppName      = 'Nash Banking',
+    DefaultApp   = true,          -- pre-installed (false = downloadable from the app store)
+    Currency     = '€',
     CurrencyCode = 'EUR',
-    BankName    = 'Nash Banking',
+    BankName     = 'Nash Banking',
+    IconFile     = 'icon.svg',    -- file in ui/assets/ (see "App icon" below)
 }
 ```
+
+### Business — `nash_businessbanking_phone/config.lua`
+
+```lua
+Config.Locale       = 'en'
+Config.AppName      = 'Nash Business'
+Config.DefaultApp   = true
+Config.Currency     = '€'
+Config.CurrencyCode = 'EUR'
+Config.BankName     = 'Nash Business Banking'
+Config.IconFile     = 'icon.svg'   -- file in ui/assets/ (see "App icon" below)
+```
+
+## App icon
+
+The icon shown on the LB Phone home screen is loaded from `ui/assets/<IconFile>` inside each phone resource. To change it, drop a new file (`.svg`, `.png`, `.jpg`, `.webp`, or `.gif`) in `ui/assets/` and point `IconFile` at it:
+
+```lua
+-- Personal phone
+Config.Phone.IconFile = 'my_logo.png'
+
+-- Business phone
+Config.IconFile = 'my_logo.png'
+```
+
+Then restart the phone resource. Recommended size: 120×120 px or larger, square, transparent background if possible — the phone scales the icon down to ~60×60 on the home screen.
 
 ## How the phone talks to the server
 

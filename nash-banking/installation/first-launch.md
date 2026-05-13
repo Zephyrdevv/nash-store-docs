@@ -43,7 +43,7 @@ ensure nash_businessbanking_phone
 
 ## In-game checks
 
-1. **Bank agency** — walk to a bank NPC (default: `149.47, -1042.06`). With `Config.InteractionType = 'ox_target'`, aim at the ped and pick "Accéder à la banque". The full desktop banking UI opens.
+1. **Bank agency** — walk to a bank NPC (default: `149.47, -1042.06`). With `Config.InteractionType = 'ox_target'`, aim at the ped and pick "Access the bank". The full desktop banking UI opens.
 2. **ATM** — approach any Fleeca / standalone ATM prop. Press `E` (or use `ox_target`). The ATM UI opens with a card insertion animation.
 3. **TPE test** — run `/testTPE` in chat. A 150€ test payment appears on your screen; pick a card and confirm — your bank balance drops by 150€.
 4. **LB Phone** — open the phone. The `Nash Banking` app should be listed (pre-installed if `Config.LBPhone.DefaultApp = true`).

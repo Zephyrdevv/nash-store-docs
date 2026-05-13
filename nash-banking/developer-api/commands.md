@@ -66,7 +66,7 @@ Triggers `exports.nash_banking:CardPayment` on the caller with a 150€ test pay
 
 **Permissions** — none, but can't be run from the server console (`source == 0` is rejected).
 
-**Implementation** — [`server/main.lua:1722`](../../) calls `exports['nash_banking']:CardPayment(source, 150, 'Test TPE - Superette')`.
+**Implementation** — defined in `server/main.lua` (around the `RegisterCommand('testTPE', …)` block). The command calls `exports['nash_banking']:CardPayment(source, 150, 'Test TPE - Superette')` for the executing player.
 
 </details>
 

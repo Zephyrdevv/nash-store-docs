@@ -16,7 +16,7 @@ Config.Business = {
     AccessLevel = 'boss',           -- 'boss' | 'manager' | 'employee' (min role to open the business dashboard)
     NpcModel = 'a_m_y_business_03',
     NpcLocations = {
-        { coords = vector4(148.0315, -1041.7035, 29.3679, 340.7635), label = 'Business Bank' },
+        { coords = vector4(254.1678, 222.6417, 106.2868, 158.0187), label = 'Business Bank' },
     },
     Blips = {
         Enabled = true,
@@ -29,7 +29,7 @@ Config.Business = {
     },
     OxTarget = {
         Icon = 'fas fa-briefcase',
-        Label = 'Banque d\'entreprise',
+        Label = 'Business bank',
         Distance = 2.5,
     },
 }

@@ -9,13 +9,14 @@ File: `shared/config.lua`
 | Key | Default | Description |
 |---|---|---|
 | `Config.Framework` | `'auto'` | `'auto'` (detect), `'esx'`, `'qbcore'`, `'qbox'` |
-| `Config.Locale` | `'fr'` | Default language (`'fr'` or `'en'`) |
+| `Config.Locale` | `'en'` | Default language (`'fr'` or `'en'`) |
 | `Config.BankName` | `'Nash Banking'` | Name shown in UI, cards, ATM |
 | `Config.Command` | `'bank'` | Chat command to open the bank |
 | `Config.Currency` | `'€'` | Currency symbol in the UI |
 | `Config.CurrencyCode` | `'EUR'` | ISO code (shown on card back) |
 | `Config.MaxTransactions` | `50` | Max transactions in the history |
 | `Config.PhoneNotifications` | `true` | Mirror banking notifications to LB Phone |
+| `Config.PreventIdleCam` | `true` | Disable GTA's native idle camera while any Nash Banking menu is open (personal bank, admin, business). Set to `false` to keep the vanilla AFK cam |
 | `Config.NpcModel` | `'a_m_y_business_01'` | Ped model for banker NPCs |
 | `Config.TransactionPurgeDays` | `90` | Auto-delete transactions older than N days (0 = disabled) |
 
@@ -33,12 +34,12 @@ Config.InteractionDistance = 2.5
 
 Config.OxTarget = {
     Icon = 'fas fa-university',
-    Label = 'Accéder à la banque',
+    Label = 'Access the bank',
     Distance = 2.5,
 }
 
 Config.OxLib = {
-    Text = '[E] Accéder à la banque',
+    Text = '[E] Access the bank',
     Icon = 'university',
     Position = 'right-center',
     Style = {},
@@ -67,8 +68,8 @@ Config.Delivery = {
     Item = 'nash_card_physical',
     NpcModel = 'a_m_y_business_01',
     Blip = { Enabled = true, Sprite = 478, Color = 5, Scale = 0.7, Display = 4, ShortRange = true },
-    OxTarget = { Icon = 'fas fa-box', Label = 'Récupérer un colis', Distance = 2.5 },
-    OxLib    = { Text = '[E] Récupérer un colis', Icon = 'box', Position = 'right-center', Style = {} },
+    OxTarget = { Icon = 'fas fa-box', Label = 'Pick up a package', Distance = 2.5 },
+    OxLib    = { Text = '[E] Pick up a package', Icon = 'box', Position = 'right-center', Style = {} },
 }
 ```
 
@@ -78,8 +79,17 @@ Config.Delivery = {
 Config.Admin = {
     Command = 'bankadmin',
     Permissions = { 'admin', 'superadmin' },  -- Ace permissions / QBCore groups
+
+    -- Video / showcase only. When true the admin panel returns hardcoded mock
+    -- data (top players, top businesses, stats, search) instead of hitting the
+    -- DB. Leaves the real DB untouched. Disable before shipping to production.
+    DemoMode = false,
 }
 ```
+
+{% hint style="warning" %}
+`DemoMode = true` is meant for promotional videos / screenshots — the admin panel will show fake RP-style names and numbers. Set back to `false` for production use.
+{% endhint %}
 
 ## LB Phone
 

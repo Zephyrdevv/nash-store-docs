@@ -36,13 +36,13 @@ The banking NUI ships with a "Find ATMs" tab rendering Banks + ATMs on an intera
 Config.ATMMap = {
     Enabled = true,
 
-    Title = 'DAB & Banques',
-    SearchPlaceholder = 'Rechercher...',
-    LoadingText = 'Chargement de la carte...',
+    Title = 'ATMs & Banks',
+    SearchPlaceholder = 'Search...',
+    LoadingText = 'Loading map...',
 
-    BankPopupLabel = 'Agence bancaire',
-    ATMPopupLabel = 'Distributeur automatique',
-    GPSButtonLabel = 'Poser le GPS',
+    BankPopupLabel = 'Bank branch',
+    ATMPopupLabel = 'ATM',
+    GPSButtonLabel = 'Set waypoint',
 
     -- Marker colors (CSS gradients)
     BankMarkerColor = 'linear-gradient(135deg, #7c3aed, #a855f7)',
@@ -55,9 +55,9 @@ Config.ATMMap = {
     BankLegendColor = '#a855f7',
     ATMLegendColor = '#3b82f6',
     PlayerLegendColor = '#22c55e',
-    BankLegendLabel = 'Banque',
-    ATMLegendLabel = 'DAB',
-    PlayerLegendLabel = 'Vous',
+    BankLegendLabel = 'Bank',
+    ATMLegendLabel = 'ATM',
+    PlayerLegendLabel = 'You',
 
     GPSButtonGradient = 'linear-gradient(135deg, #7c3aed, #a855f7)',
 
