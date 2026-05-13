@@ -51,6 +51,15 @@
     * [Callbacks](nash-banking/developer-api/callbacks.md)
     * [Commands](nash-banking/developer-api/commands.md)
   * [Changelog](nash-banking/changelog.md)
+
+<!--
+  ────────────────────────────────────────────────────────────────────────────
+  Hidden assets — kept on disk under their respective folders but unlinked
+  from the public sidebar. To re-publish one, paste its block back into the
+  ASSETS section above and push.
+  Source preserved in: docs-snapshots/SUMMARY-full.md (or git history).
+  ────────────────────────────────────────────────────────────────────────────
+
 * [bagpick](bagpick/README.md)
   * [Installation](bagpick/installation.md)
   * [Compatibility](bagpick/compatibility.md)
@@ -157,3 +166,4 @@
   * [Compatibility](smoke-vehicleseatchange/compatibility.md)
   * [FAQ](smoke-vehicleseatchange/faq.md)
   * [Common Errors](smoke-vehicleseatchange/common-errors.md)
+-->
