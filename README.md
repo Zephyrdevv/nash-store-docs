@@ -2,7 +2,7 @@
 
 Welcome to the official documentation for **Nash Store** FiveM scripts.
 
-Nash Store offers premium and free FiveM resources with clean code, polished UIs, and full ESX / QBCore / QBOX support.
+Premium FiveM resources with clean code, polished UIs, and full ESX / QBCore / QBOX support.
 
 ---
 
