@@ -55,4 +55,4 @@ This is the fallback position when the attach fails. Usually means the hand bone
 
 ## Credits
 
-The card prop is based on **Alcaline's Wallet Pack**. Original pack and credits in `stream/READ ME.txt`.
+The TPE (payment terminal) prop is by **BzZz**.
