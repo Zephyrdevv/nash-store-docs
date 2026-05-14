@@ -122,6 +122,8 @@ Three tiers are shipped by default. The `features` block is what the server read
 | `maxTransferAmount` | number | Max amount per transfer |
 | `maxWithdrawPerDay` | number | Daily withdraw count cap |
 | `maxWithdrawAmount` | number | Max amount per withdraw |
+| `maxDepositPerDay` | number | Daily deposit count cap (`-1` = unlimited, default) |
+| `maxDepositAmount` | number | Max amount per single deposit (`-1` = unlimited, default) |
 | `freeAtmWithdrawals` | number | Free ATM withdraws per month, past which `Config.ATM.Fee` applies |
 | `nashPointsMultiplier` | number | Loyalty points earned per 10€ spent |
 | `investAccess` | boolean | Unlocks the Invest page (stocks / ETFs) |
