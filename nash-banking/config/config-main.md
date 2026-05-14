@@ -66,6 +66,11 @@ Config.Delivery = {
     Cost = 0,                         -- 0 = free
     Delay = 0,                        -- seconds before card is ready (0 = instant)
     Item = 'nash_card_physical',
+    -- false (default) = the bank where the player physically stands is EXCLUDED
+    --                   from the delivery picker (realistic — you must collect
+    --                   your card at another branch).
+    -- true            = the current bank can also be picked as delivery point.
+    AllowSameBankDelivery = false,
     NpcModel = 'a_m_y_business_01',
     Blip = { Enabled = true, Sprite = 478, Color = 5, Scale = 0.7, Display = 4, ShortRange = true },
     OxTarget = { Icon = 'fas fa-box', Label = 'Pick up a package', Distance = 2.5 },
