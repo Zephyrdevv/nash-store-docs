@@ -81,3 +81,56 @@ TriggerServerEvent('nash_banking:p2pInitiate', targetServerId, amount, descripti
 - Buyer: `nash_banking:buyerReceiveTPE`, then `nash_banking:tpeResult`
 
 </details>
+
+---
+
+## Integration hooks
+
+Server-side events fired by the banking script (or that your own resource is expected to trigger) for inter-resource wiring. These are **not** client-triggered RPCs — they're plain `TriggerEvent` / `AddEventHandler` server-to-server hooks.
+
+<details>
+
+<summary>nash_banking:itemRemoved</summary>
+
+Normalized "banking item was removed from a player's inventory" event. Fired **by the banking script** whenever the physical bank card item (`nash_card_physical`) or any Nash item leaves a player's inventory. Used internally by the `Config.PhysicalCard.FreezeOnLoss` feature to auto-freeze the corresponding card in the database.
+
+```lua
+TriggerEvent('nash_banking:itemRemoved', source, itemName, count, metadata, slot)
+```
+
+**Parameters**
+
+| Name | Type | Description |
+|---|---|---|
+| `source` | `number` | Server ID of the player who lost the item |
+| `itemName` | `string` | Item name (e.g. `nash_card_physical`, `nash_tpe`) |
+| `count` | `number` | Amount removed |
+| `metadata` | `table` | Item metadata at removal time — for `nash_card_physical` this contains `{ card_id = ... }` |
+| `slot` | `number` | Slot from which the item was removed |
+
+**How it gets fired**
+
+- **`ox_inventory`** — wired automatically. `bridge/inventory/server.lua` listens for `ox_inventory:removedItem` and re-emits it as `nash_banking:itemRemoved`.
+- **Other inventories (`qs-inventory`, `qb-inventory`, custom)** — the banking script cannot listen to your inventory's hook by itself. Wire it yourself, in your own resource:
+
+  ```lua
+  AddEventHandler('your-inventory:server:removedItem', function(source, item, count, metadata, slot)
+      TriggerEvent('nash_banking:itemRemoved', source, item, count, metadata, slot)
+  end)
+  ```
+
+If your inventory has no such hook, skip it — the rest of the banking still works, only the auto-freeze-on-loss feature becomes inert.
+
+**Listening yourself**
+
+You can also listen to this event from your own resource — useful e.g. to log every physical card loss, or to award something when a specific banking item is lost:
+
+```lua
+AddEventHandler('nash_banking:itemRemoved', function(source, itemName, count, metadata, slot)
+    if itemName == 'nash_card_physical' and metadata and metadata.card_id then
+        print(('Player %d lost card #%s'):format(source, metadata.card_id))
+    end
+end)
+```
+
+</details>

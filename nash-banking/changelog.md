@@ -6,6 +6,70 @@ The format follows [Keep a Changelog](https://keepachangelog.com/) and the proje
 
 ---
 
+## [1.0.3] — Quasar Phone Pro & bridge overhaul
+
+### Added
+
+- **Quasar Phone Pro support** — both `nash_banking_phone` and `nash_businessbanking_phone` auto-detect the phone system at startup (`lb-phone` or `qs-smartphone-pro`). LB Phone has priority when both are started. No config changes required.
+- **Inventory bridge** — pluggable `Inventory.*` API with auto-detect for `ox_inventory`, `qs-inventory`, `qb-inventory`, and a `custom` mode. See [Custom Inventory](compatibility/custom-inventory.md).
+- **`nash_banking:itemRemoved` server event** — normalized hook that fires when a banking item leaves a player's inventory. Auto-wired from `ox_inventory:removedItem`; custom inventories trigger it themselves.
+- Documentation: new **Custom Inventory** page under Compatibility.
+
+### Changed
+
+- **Reorganized bridge files** under a top-level `bridge/` folder:
+  - `bridge/framework/{framework,client,server}.lua` (was `shared/bridge/framework.lua` + `client/bridge.lua` + `server/bridge.lua`)
+  - `bridge/inventory/{config,server}.lua` (new)
+  - All 5 bridge files are in `escrow_ignore` — customers can edit them directly to plug in a custom framework or inventory.
+- Every server-side `exports.ox_inventory:*` call is now routed through the new `Inventory.*` bridge.
+- Documentation refresh: **Compatibility Overview**, **Custom Framework**, **Requirements**, **Inventory Items**, **Phone Apps**.
+
+---
+
+## [1.0.2] — Live balance sync, full currency sweep, interaction fixes
+
+### Fixed
+
+- **Phone balance no longer stays frozen** while the ATM / desktop menu shows the correct value.
+  - `nash_banking_phone/client.lua` now sends `{ action = 'balanceUpdate', data = { bank, cash, savings } }` (was `{ type = 'balanceUpdate', bank, cash }`, which the NUI's `useNuiEvent` matcher never accepted).
+  - Server now broadcasts `nash_banking:updateBalance` on every money-changing callback: `deposit`, `withdraw`, `transfer` (sender **and** target), `moveSavings`, `moveToBank`, `atmDeposit`, `atmWithdraw`.
+- **ATM impossible to use in `ox_lib` and `default` interaction modes** — `GetClosestObjectOfType` was being destructured as two values, but the native returns a single object handle (`0` when nothing is found). Fixed in the 3 call sites (`findNearestATM`, ox_lib branch, default branch) with `local entity = GetClosestObjectOfType(...) ; if entity and entity ~= 0 then …`.
+- **`DrawText3D` used before definition** in `atm.lua` (default-mode ATM crashed on approach) — moved the local function declaration above `setupATMInteraction`.
+- **Business bank NPC unreachable in `ox_lib` / `default` modes** — added `SetupBusinessOxLib` / `SetupBusinessDefault` + `SetupBusinessInteraction` dispatcher (only `SetupBusinessOxTarget` existed before).
+- **`ox_lib` textUI stayed visible under the open bank / business menu** — new global `IsNashMenuOpen()` helper + guard on the interaction loops.
+- **ATM `ox_target` `addModel` never removed on resource restart** — added the cleanup in `onResourceStop`.
+
+### Changed
+
+- **Currency is now 100 % dynamic across the desktop UI** — swept every remaining hardcoded `€`: `TransactionItem`, `TransfersPage`, `CryptoPage`, `BusinessPage`, `AdminPage`, `SubscriptionModal`, `CardsModal`, `AnalyticsModal`, `ActionModal`, plus the TPE terminal overlay. A server set to `$` / `USD` now shows the right symbol everywhere.
+- The TPE overlay (buyer + seller) receives the current `Config.Currency` through the NUI payload.
+
+---
+
+## [1.0.1] — Tier deposit limits, delivery modes, phone quick actions
+
+### Added
+
+- **`maxDepositPerDay` & `maxDepositAmount`** — per-day deposit limits per subscription tier (Standard / Plus / Premium) in `config.subscriptions.lua`.
+- **`Config.Delivery.AllowSameBankDelivery`** — choose between the realistic mode (deliver to a different bank) and the convenient mode (deliver to the same bank the player is standing in).
+- **`Config.Admin.DemoMode`** — turn the admin panel into a mock-data view for videos / Tebex screenshots without touching the DB.
+- **`Config.PreventIdleCam`** — blocks GTA's native AFK camera while any Nash menu is open.
+- **`QuickActions` toggles** on both phone apps — show / hide each button on the home screen (Add money / Move / Transfer / More on personal, Deposit / Withdraw / Buy TPE on business) from `config.lua`.
+- **`IconFile` option** on both phone apps — swap the app icon for any `.svg`, `.png`, `.jpg`, `.webp`, or `.gif`.
+
+### Changed
+
+- **Currency became dynamic** on the main UI header, home balance, savings, business, crypto, accounts modal and bank info modal (initial pass — completed in v1.0.2 across all remaining pages and the TPE overlay).
+- **Add employee** in business banking accepts a player's server ID directly (resolves to identifier server-side) — the employee's real name shows up instead of `4`.
+- **Phone number placeholder + auto-format** aligned with LB Phone style (`555 123 9473`, 3+3+4 grouping).
+
+### Fixed
+
+- **Card pickup** now works on all 3 interaction modes (`ox_target`, `ox_lib`, `default`) — press G at the bank where you ordered a card.
+- **Card creation failures** now show an explicit toast (e.g. *"You have reached the maximum number of cards for your subscription"*) instead of silently doing nothing.
+
+---
+
 ## [1.0.0] — Initial release
 
 The first public release of Nash Banking.
