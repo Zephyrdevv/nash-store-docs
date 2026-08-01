@@ -1,18 +1,18 @@
 # Custom Framework
 
-If you use a custom or private framework, you can wire it into Nash Banking by editing the bridge files.
+If you use a custom or private framework, you can wire it into Nash Banking by editing the bridge files. All three files below are in `escrow_ignore` — you can edit them directly on your server.
 
 ## Files to edit
 
 | File | Purpose |
 |---|---|
-| `shared/bridge/framework.lua` | Framework detection + fetching your core object |
-| `server/bridge.lua` | Server-side API — must implement all `Bridge.*` functions listed below |
-| `client/bridge.lua` | Client-side API — player data, callbacks, notifications |
+| `bridge/framework/framework.lua` | Framework detection + fetching your core object |
+| `bridge/framework/server.lua` | Server-side API — must implement all `Bridge.*` functions listed below |
+| `bridge/framework/client.lua` | Client-side API — player data, callbacks, notifications |
 
 ## Minimum required functions (server)
 
-Implement these in `server/bridge.lua`. Switch on `Framework == 'myframework'` and return the expected shape — matching the ESX / QBCore branches is the easiest starting point.
+Implement these in `bridge/framework/server.lua`. Switch on `Framework == 'myframework'` and return the expected shape — matching the ESX / QBCore branches is the easiest starting point.
 
 | Function | Returns | Description |
 |---|---|---|
@@ -39,7 +39,7 @@ Implement these in `server/bridge.lua`. Switch on `Framework == 'myframework'` a
 
 ## Minimum required functions (client)
 
-In `client/bridge.lua`:
+In `bridge/framework/client.lua`:
 
 | Function | Description |
 |---|---|

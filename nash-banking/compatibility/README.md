@@ -1,28 +1,35 @@
 # Compatibility Overview
 
-Nash Banking supports three frameworks out of the box through a unified **bridge** system.
+Nash Banking uses two independent bridges — one for the framework, one for the inventory — with auto-detect at startup and a `'custom'` escape hatch for both. A third bridge handles phone-app detection.
 
-## Supported frameworks
+## Supported out of the box
 
-- [ESX](esx.md) — `es_extended` (legacy + 1.x)
-- [QBCore](qbcore.md) — `qb-core`
-- [QBOX](qbox.md) — `qbx_core`
-
-## How the bridge works
-
-Three files make up the bridge:
-
-| File | Purpose |
+| Bridge | Auto-detected |
 |---|---|
-| `shared/bridge/framework.lua` | Auto-detection + fetch of the framework object |
-| `server/bridge.lua` | Unified server-side API (`Bridge.GetPlayer`, `Bridge.AddBank`, `Bridge.RegisterCallback`, …) |
-| `client/bridge.lua` | Unified client-side API (`Bridge.TriggerCallback`, `Bridge.Notify`, `Bridge.GetPlayerData`, …) |
+| **Framework** | `es_extended` (ESX) · `qbx_core` (QBOX) · `qb-core` (QBCore) |
+| **Inventory** | `ox_inventory` · `qs-inventory` · `qb-inventory` |
+| **Phone** (optional) | `lb-phone` · `qs-smartphone-pro` |
 
-Every server / client script uses `Bridge.*` instead of calling ESX / QBCore directly — the bridge dispatches to the right framework at runtime.
+## Bridge architecture
 
-## Detection order
+```
+bridge/
+  framework/
+    framework.lua   -- detect + FrameworkObj wiring
+    client.lua      -- Bridge.* wrappers (client)
+    server.lua      -- Bridge.* wrappers (server)
+  inventory/
+    config.lua      -- Config.Inventory + Config.CustomInventory stub
+    server.lua      -- Inventory.* wrappers
+```
 
-`shared/bridge/framework.lua` runs on both client and server at resource start:
+Every server / client script uses `Bridge.*` and `Inventory.*` instead of calling ESX / QBCore / ox_inventory directly — the bridges dispatch to the right implementation at runtime.
+
+All five files above are in `escrow_ignore` — you can edit them on your server for any custom setup.
+
+## Framework detection
+
+`bridge/framework/framework.lua` runs on both client and server at resource start:
 
 1. If `Config.Framework` is `'esx'`, `'qbcore'` or `'qbox'`, use it directly (skip detection).
 2. Otherwise (`'auto'`, default):
@@ -37,6 +44,31 @@ Every server / client script uses `Bridge.*` instead of calling ESX / QBCore dir
 Config.Framework = 'auto' -- 'auto' | 'esx' | 'qbcore' | 'qbox'
 ```
 
-## Extending the bridge
+Supported out of the box: [ESX](esx.md) · [QBCore](qbcore.md) · [QBOX](qbox.md).
 
-If you use a custom framework, see [Custom Framework](custom-framework.md).
+## Inventory detection
+
+`bridge/inventory/server.lua` runs on the server at resource start:
+
+1. If `Config.Inventory` is set to a specific inventory, use it directly.
+2. Otherwise (`'auto'`, default):
+   1. `ox_inventory` started → `ox_inventory`
+   2. `qs-inventory` started → `qs-inventory`
+   3. `qb-inventory` started → `qb-inventory`
+3. If none are started → falls back to `'custom'` (dispatches to `Config.CustomInventory`).
+
+```lua
+-- bridge/inventory/config.lua
+Config.Inventory = 'auto' -- 'auto' | 'ox_inventory' | 'qs-inventory' | 'qb-inventory' | 'custom'
+```
+
+## Phone detection
+
+The two optional phone apps (`nash_banking_phone`, `nash_businessbanking_phone`) auto-detect `lb-phone` first, then `qs-smartphone-pro`. See [Phone Apps](../installation/lb-phone.md).
+
+## Extending the bridges
+
+If you use a framework or inventory the auto-detect doesn't cover:
+
+- [Custom Framework](custom-framework.md) — wire your own framework into `bridge/framework/*`.
+- [Custom Inventory](custom-inventory.md) — fill in `Config.CustomInventory` with your inventory's API.

@@ -11,15 +11,16 @@
 | -------- | ------- |
 | `ox_lib` | UI, utilities, locales |
 | `oxmysql` | Database access |
-| `ox_inventory` | Physical card & TPE items |
-| Framework | `es_extended` **or** `qb-core` **or** `qbx_core` |
+| An **inventory** | Physical card & TPE items — `ox_inventory`, `qs-inventory`, `qb-inventory`, or any custom inventory via the [inventory bridge](../compatibility/custom-inventory.md) |
+| A **framework** | `es_extended` (ESX), `qb-core` (QBCore), `qbx_core` (QBOX), or any custom framework via the [framework bridge](../compatibility/custom-framework.md) |
 
 ## Optional resources
 
 | Resource | Purpose |
 | -------- | ------- |
-| `lb-phone` | Enables the two banking phone apps |
+| `ox_target` | Cleanest interaction mode for bank / ATM / business NPCs. `ox_lib` textUI and default 3D text are also supported — configurable in `shared/config.lua` |
+| A **phone** | Enables the two banking phone apps — `lb-phone` or `qs-smartphone-pro` (auto-detected) |
 
 ## Compatibility matrix
 
-See the [Compatibility](../compatibility/README.md) section for framework-specific notes.
+See the [Compatibility](../compatibility/README.md) section for the framework / inventory / phone bridge overview and custom-mode guides.

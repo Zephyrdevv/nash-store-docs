@@ -1,16 +1,18 @@
-# LB Phone Apps (optional)
+# Phone Apps (LB Phone & Quasar Phone Pro) — optional
 
-Nash Banking ships two LB Phone apps:
+Nash Banking ships two phone apps:
 
 - **`nash_banking_phone`** — personal banking app
 - **`nash_businessbanking_phone`** — business banking app
 
-Both are independent resources that depend on `nash_banking` being started first (they import `@nash_banking/shared/bridge/framework.lua` and `@nash_banking/client/bridge.lua`).
+Both are independent resources that depend on `nash_banking` being started first (they import `@nash_banking/bridge/framework/framework.lua` and `@nash_banking/bridge/framework/client.lua`).
 
 ## Requirements
 
-- `lb-phone` resource started
+- One phone resource started: **`lb-phone`** *or* **`qs-smartphone-pro`**
 - `nash_banking` started before the phone apps
+
+The phone type is **auto-detected at startup** — no config needed. LB Phone has priority if both are started.
 
 ## Installing an app
 
@@ -18,7 +20,7 @@ Both are independent resources that depend on `nash_banking` being started first
 2. Add to your `server.cfg` **after** `nash_banking`:
 
     ```cfg
-    ensure lb-phone
+    ensure lb-phone                     # or qs-smartphone-pro
     ensure nash_banking
     ensure nash_banking_phone
     ensure nash_businessbanking_phone
@@ -26,30 +28,22 @@ Both are independent resources that depend on `nash_banking` being started first
 
 3. Restart the server. In-game, open the phone — the app should be visible.
 
-## How the apps register in LB Phone
+## How the apps register
 
-Each app waits for `lb-phone` to be `'started'`, then calls `exports['lb-phone']:AddCustomApp` with the UI URL.
+Each app auto-detects which phone system is running and uses the appropriate API. Console print at startup:
 
-```lua
--- nash_banking_phone/client.lua
-while GetResourceState('lb-phone') ~= 'started' do
-    Wait(500)
-end
-
-exports['lb-phone']:AddCustomApp({
-    identifier  = 'nash-banking',
-    name        = Config.Phone.AppName or 'Nash Banking',
-    description = L('app_description'),
-    developer   = 'Nash',
-    defaultApp  = Config.Phone.DefaultApp ~= false,  -- pre-installed
-    size        = 4096,
-    ui          = GetCurrentResourceName() .. '/ui/index.html',
-    icon        = 'https://cfx-nui-' .. GetCurrentResourceName() .. '/ui/assets/icon.svg',
-    fixBlur     = true,
-})
+```
+[Nash Banking Phone] Phone system: lb
+```
+…or:
+```
+[Nash Banking Phone] Phone system: quasar
 ```
 
-The app re-registers automatically if `lb-phone` restarts (listener on `onResourceStart`).
+- **LB Phone** — pre-installed by default via `exports['lb-phone']:AddCustomApp({...})`.
+- **Quasar Phone Pro** — registered in the phone's app store via `exports['qs-smartphone-pro']:addCustomApp({...})`.
+
+The app re-registers automatically if the phone resource restarts (listener on `onResourceStart`).
 
 ## Configuration
 
@@ -61,7 +55,7 @@ Each phone app has its own `config.lua`. **The two apps use slightly different s
 Config.Phone = {
     Locale       = 'en',          -- 'fr' or 'en'
     AppName      = 'Nash Banking',
-    DefaultApp   = true,          -- pre-installed (false = downloadable from the app store)
+    DefaultApp   = true,          -- LB Phone only: pre-installed (false = downloadable from the app store)
     Currency     = '€',
     CurrencyCode = 'EUR',
     BankName     = 'Nash Banking',
@@ -83,7 +77,7 @@ Config.IconFile     = 'icon.svg'   -- file in ui/assets/ (see "App icon" below)
 
 ## App icon
 
-The icon shown on the LB Phone home screen is loaded from `ui/assets/<IconFile>` inside each phone resource. To change it, drop a new file (`.svg`, `.png`, `.jpg`, `.webp`, or `.gif`) in `ui/assets/` and point `IconFile` at it:
+The icon shown on the phone home screen is loaded from `ui/assets/<IconFile>` inside each phone resource. To change it, drop a new file (`.svg`, `.png`, `.jpg`, `.webp`, or `.gif`) in `ui/assets/` and point `IconFile` at it:
 
 ```lua
 -- Personal phone
@@ -93,11 +87,11 @@ Config.Phone.IconFile = 'my_logo.png'
 Config.IconFile = 'my_logo.png'
 ```
 
-Then restart the phone resource. Recommended size: 120×120 px or larger, square, transparent background if possible — the phone scales the icon down to ~60×60 on the home screen.
+Then restart the phone resource. Recommended size: 120×120 px or larger, square, transparent background if possible — the phone scales the icon down on the home screen.
 
 ## How the phone talks to the server
 
-The phone apps reuse the exact same callbacks as the desktop UI via the shared `Bridge.TriggerCallback`:
+Both phones use standard FiveM NUI primitives (`RegisterNUICallback` on the server, `fetch()` from the iframe), so the UI code is identical across LB Phone and Quasar Phone Pro. The React app reuses the exact same server callbacks as the desktop UI via `Bridge.TriggerCallback`:
 
 ```lua
 -- Example: home screen data
@@ -106,7 +100,7 @@ Bridge.TriggerCallback('nash_banking:getTransactions', function(tx, registered, 
 end)
 ```
 
-This means any feature added to `server/main.lua` is immediately usable in both the desktop NUI and the phone app.
+Any feature added to `server/main.lua` is immediately usable in the desktop NUI **and** both phone systems.
 
 ## Disabling the apps
 
@@ -115,4 +109,4 @@ This means any feature added to `server/main.lua` is immediately usable in both 
 
 ## Disabling phone notifications
 
-In-bank events (transfers received, TPE paid, requests) can mirror to LB Phone toasts. Toggle with `Config.PhoneNotifications = false` in [`shared/config.lua`](../config/config-main.md).
+In-bank events (transfers received, TPE paid, requests) can mirror to phone toasts. Toggle with `Config.PhoneNotifications = false` in [`shared/config.lua`](../config/config-main.md).
