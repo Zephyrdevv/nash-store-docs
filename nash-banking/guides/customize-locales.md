@@ -1,6 +1,6 @@
 # Customize locales / add a new language
 
-Since **v1.2.0**, Nash Banking loads its locale strings at **runtime** from Lua files — you can add or edit translations without touching the compiled React NUI and without rebuilding anything.
+Since **v1.0.7**, Nash Banking loads its locale strings at **runtime** from Lua files — you can add or edit translations without touching the compiled React NUI and without rebuilding anything.
 
 The mechanism is the same for the desktop banking UI, the personal phone app, and the business phone app. The Lua locale table you edit is sent to each React NUI on open and merged over the compiled `fr` / `en` fallbacks.
 

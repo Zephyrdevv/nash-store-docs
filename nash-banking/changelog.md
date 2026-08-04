@@ -6,7 +6,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/) and the proje
 
 ---
 
-## [1.2.0] — Quasar Phone V3, character switch, runtime locales
+## [1.0.7] — Quasar Phone V3, character switch, runtime locales
 
 ### Added
 
