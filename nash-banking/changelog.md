@@ -6,6 +6,25 @@ The format follows [Keep a Changelog](https://keepachangelog.com/) and the proje
 
 ---
 
+## [1.2.0] — Quasar Phone V3, character switch, runtime locales
+
+### Added
+
+- **Quasar Phone V3 support** — `nash_banking_phone` and `nash_businessbanking_phone` now auto-detect the current `qs-smartphone` resource (Quasar Phone V3) in addition to LB Phone and legacy `qs-smartphone-pro`. Detection order: `lb-phone` → `qs-smartphone` → `qs-smartphone-pro`. Uses the current V3 `addCustomApp` signature (`id` / `label` / `icon` / `iframe.url` / `appStoreOnly` / `price`). Prints the detected system in F8 on boot (`[Nash Banking Phone] Phone system: quasar`).
+- **Runtime locales for the desktop UI** — the desktop banking React NUI now merges runtime locale overrides on top of its compiled `fr` / `en` defaults. Adding a new language (e.g. Slovenian, Spanish, German) no longer requires the React source or a rebuild — just drop a `locales/<lang>.lua` file, set `Config.Locale`, restart. See the updated [Customize locales](guides/customize-locales.md) guide.
+- **`GetLocaleTable()` global helper** in `shared/locale.lua` — returns the active `Locales[Config.Locale]` table as a Lua map. Used internally to feed the NUI payload; also available for third-party integrations that want the same fallback logic.
+
+### Fixed
+
+- **Phone apps returned to a blank screen after a multichar switch** — when a player switched character without disconnecting, the phone iframe kept the previous character's React state and the new (unregistered) character saw the background but no UI content. Fix: `nash_banking_phone/client.lua` and `nash_businessbanking_phone/client.lua` now listen for `esx:playerLoaded` / `QBCore:Client:OnPlayerLoaded` and fire a `characterSwitch` NUI event that resets the React state and re-fetches for the new character.
+- **`isRegistered` default in the personal phone context was `true`** — caused a brief flash of the empty main dashboard for unregistered new characters. Default is now `false` so unregistered players immediately see the "Register at a bank" screen.
+
+### Changed
+
+- Documentation refresh: **Customize locales** guide rewritten around the new runtime mechanism; **Configuration Files** updated to reflect that `Config.Locale` accepts any language shipped in `locales/`.
+
+---
+
 ## [1.0.3] — Quasar Phone Pro & bridge overhaul
 
 ### Added

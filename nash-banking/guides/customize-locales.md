@@ -1,101 +1,88 @@
-# How to customize locales
+# Customize locales / add a new language
 
-Nash Banking uses **two** parallel locale systems:
+Since **v1.2.0**, Nash Banking loads its locale strings at **runtime** from Lua files — you can add or edit translations without touching the compiled React NUI and without rebuilding anything.
 
-1. **Lua locales** — `nash_banking/locales/*.lua` — server-side notifications, transaction descriptions, chat messages, Discord logs.
-2. **React locales** — `nash_banking/web/src/hooks/useLocale.ts` (+ the two phone apps) — every string rendered in the NUI.
+The mechanism is the same for the desktop banking UI, the personal phone app, and the business phone app. The Lua locale table you edit is sent to each React NUI on open and merged over the compiled `fr` / `en` fallbacks.
 
-{% hint style="warning" %}
-When adding or editing any user-facing text, **both** systems must be updated. A string missing from one side shows as its raw key (`tx_card_payment`) or falls back to English.
-{% endhint %}
+## Where the locale files live
 
-## The two systems
+| Resource | File(s) | What it drives |
+|---|---|---|
+| `nash_banking` | `nash_banking/locales/en.lua`, `fr.lua`, `<yours>.lua` | Server messages, transaction descriptions, notifications, **and every string in the desktop banking UI (menus, buttons, modals)** |
+| `nash_banking_phone` | `nash_banking_phone/locales.lua` (single file with all `Locales[lang]` blocks inside) | Every string in the personal banking phone app |
+| `nash_businessbanking_phone` | `nash_businessbanking_phone/locales.lua` | Every string in the business banking phone app |
 
-### Lua locales (`locales/`)
+All these files are in `escrow_ignore` — you can edit them directly on your server.
 
-One file per language:
+## Change an existing translation
 
-```
-nash_banking/locales/
-├── en.lua
-└── fr.lua
-```
+Open the corresponding file, edit the key's value, then `restart` the resource. Both the Lua side and the React NUI pick up the change on next open — **no rebuild needed**.
 
-Each file returns a `Locales[lang]` table:
+## Add a new language (example: Spanish `es`)
+
+### 1. Main banking
+
+Duplicate `nash_banking/locales/en.lua` → `nash_banking/locales/es.lua`, translate every value, and rename the top-level table:
 
 ```lua
--- locales/en.lua
-Locales['en'] = {
-    tx_card_payment = 'Card payment',
-    tpe_timeout = 'Payment timed out',
-    insufficient_funds = 'Insufficient funds',
-    -- ...
+-- nash_banking/locales/es.lua
+Locales['es'] = {
+    tx_card_payment = 'Pago con tarjeta',
+    tpe_timeout = 'Tiempo de espera agotado',
+    insufficient_funds = 'Fondos insuficientes',
+    home_title = 'Inicio',
+    cards_title = 'Tarjetas',
+    -- … every key from en.lua, translated
 }
 ```
 
-The active language is picked from `Config.Locale` (`'fr'` or `'en'`). The helper `L('key')` in every server / client script looks up the key; if it's missing, it falls back to `Locales['fr']`, then to the raw key.
+The fxmanifest already loads `locales/*.lua` via a glob, so no manifest edit needed.
 
-### React locales (`web/src/hooks/useLocale.ts`)
+### 2. Personal phone
 
-Inside `useLocale.ts` you'll find:
+Open `nash_banking_phone/locales.lua` and add a new block alongside the existing `Locales['fr']` / `Locales['en']`:
 
-```ts
-const LOCALES = {
-  en: {
-    home_title: 'Home',
-    cards_title: 'Cards',
-    // ...
-  },
-  fr: {
-    home_title: 'Accueil',
-    cards_title: 'Cartes',
-    // ...
-  },
+```lua
+Locales['es'] = {
+    -- … same keys as the existing Locales['fr'] block, translated
 }
 ```
 
-Components call `const t = useLocale()` and then `t('home_title')` — same fallback logic as the Lua side.
+### 3. Business phone
 
-The two phone apps have their own `useLocale.ts` under `nash_banking_phone/web/src/` and `nash_businessbanking_phone/web/src/`.
+Same treatment in `nash_businessbanking_phone/locales.lua`.
 
-## Adding a new language
+### 4. Set the language
 
-Say you want to add Spanish (`es`):
+- **Main banking + server messages**: `Config.Locale = 'es'` in `nash_banking/shared/config.lua`.
+- **Personal phone**: `Config.Phone.Locale = 'es'` in `nash_banking_phone/config.lua`.
+- **Business phone**: `Config.Locale = 'es'` in `nash_businessbanking_phone/config.lua`.
 
-1. **Lua** — duplicate `locales/fr.lua` → `locales/es.lua`. Translate every value. Top line becomes `Locales['es'] = { … }`.
-2. **React (main UI)** — add an `es` block in `web/src/hooks/useLocale.ts` with every key translated.
-3. **React (phone apps)** — same in the two phone app `useLocale.ts`.
-4. Set `Config.Locale = 'es'` in `shared/config.lua` and in each phone app's `config.lua`.
-5. Rebuild the UIs (see below).
+### 5. Restart
 
-## Changing existing translations
-
-- **Lua** — edit `locales/fr.lua` (or `en.lua`) in place. `restart nash_banking` and the new string takes effect immediately.
-- **React** — edit `useLocale.ts` and rebuild. Without a rebuild, the old string stays in the compiled `build/`.
-
-## Rebuilding the UI after changes
-
-All three resources ship with a Vite-based React front-end:
-
-```bash
-# Main banking NUI
-cd nash_banking/web
-npm install     # first time only
-npm run build
-
-# Phone apps (only if you edited their locales)
-cd ../../nash_banking_phone/web && npm run build
-cd ../../nash_businessbanking_phone/web && npm run build
+```
+restart nash_banking
+restart nash_banking_phone
+restart nash_businessbanking_phone
 ```
 
-Each `npm run build` writes the new assets into the resource's `build/` (or `ui/`) folder. Then `restart nash_banking` (or the matching phone resource).
+Open the bank in-game — everything is in Spanish. No rebuild, no source access needed.
 
-{% hint style="info" %}
-Only string changes can be hot-reloaded via `restart` — if you change the React component tree, the NUI needs a `refresh` client-side too (close + reopen the banking UI).
-{% endhint %}
+## Fallback behavior
+
+For any key missing in your `es.lua`, the app silently falls back to the compiled default (`fr` for the phones, `fr` then `en` for the desktop UI). No red errors, no broken UI — you can start with a partial translation and fill in gaps over time.
+
+## Translating in bulk
+
+The `en.lua` file has ~500 keys for the main banking, plus ~150 in each phone `locales.lua`. Easiest workflow:
+
+1. Copy the whole `Locales['en']` block into your favorite LLM.
+2. Ask: *"Translate every right-hand string to Spanish while keeping the left-hand keys untouched."*
+3. Paste the result back as your `Locales['es']` block.
+4. Skim once to catch any culturally-specific string (currency names, greetings, in-jokes).
 
 ## Locale helper notes
 
-- Server-side `L('key')` is defined in `server/main.lua` and reused everywhere.
-- Client-side `L('key')` is defined in `client/main.lua`.
-- When adding a locale key, do it in **both** `en.lua` and `fr.lua` — a missing key on one side logs a warning in the console on first use.
+- Server-side / client-side Lua: `L('key')` reads from `Locales[Config.Locale]`, fallback to `Locales['fr']`, fallback to the raw key.
+- Desktop React: `t('key')` merges `data.localeOverrides` (sent from the Lua file at `openBank` time) over the compiled `fr` / `en` defaults.
+- Phone apps React: `t('key')` merges the Lua-provided override table over each app's own `DEFAULT_LOCALE` (French).

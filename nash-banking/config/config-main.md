@@ -9,7 +9,7 @@ File: `shared/config.lua`
 | Key | Default | Description |
 |---|---|---|
 | `Config.Framework` | `'auto'` | `'auto'` (detect), `'esx'`, `'qbcore'`, `'qbox'` |
-| `Config.Locale` | `'en'` | Default language (`'fr'` or `'en'`) |
+| `Config.Locale` | `'en'` | Language for the whole banking (server messages **and** desktop UI). Ships with `'fr'` and `'en'`. To add a new language, drop a new file in `locales/` — see [Customize locales](../guides/customize-locales.md). |
 | `Config.BankName` | `'Nash Banking'` | Name shown in UI, cards, ATM |
 | `Config.Command` | `'bank'` | Chat command to open the bank |
 | `Config.Currency` | `'€'` | Currency symbol in the UI |
